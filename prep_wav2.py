@@ -5,10 +5,10 @@ import random
 import json
 
 def save_wav(name, data):
-    wavfile.write(name, 44100, data.flatten().astype(np.float32))
+    wavfile.write(name, 48000, data.flatten().astype(np.float32))
 
 def save_wav_dont_flatten(name, data):
-    wavfile.write(name, 44100, data.astype(np.float32))
+    wavfile.write(name, 48000, data.astype(np.float32))
 
 def normalize(data):
     data_max = max(data)
@@ -182,9 +182,9 @@ def conditionedWavParse(args):
         in_rate, in_data = wavfile.read(ds["TrainingClean"])
         out_rate, out_data = wavfile.read(ds["TrainingTarget"])
         
-        if out_rate != 44100:
-            print("\n\n\n[ERROR] The out*.wav file has an invalid samplerate " +"("+ str(out_rate) +")")
-            print("[ERROR] Please re-export your wav file as 44100 samplerate (44.1kHz).\n\n\n")
+        if out_rate != 48000:
+            print("\n\n\n[ERROR] The out*.wav file has an invalid samplerate (NeuralSeed / Daisy Seed uses 48kHz) " +"("+ str(out_rate) +")")
+            print("[ERROR] Please re-export your wav file as 48000 samplerate (48kHz).\n\n\n")
             return
     
         if out_data.dtype != "int16" and out_data.dtype != "float32":
