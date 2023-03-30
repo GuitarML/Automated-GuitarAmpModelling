@@ -3,27 +3,27 @@
 	"Data Sets": [
 	{
 		"Parameters":[ 0.0 ],
-		"TrainingClean": "Data/Proteus_Capture.wav",
+		"TrainingClean": "Data/Proteus_Capture_48k.wav",
 		"TrainingTarget": "../out1.wav"
 	},
 	{
 		"Parameters":[ 0.25 ],
-		"TrainingClean": "Data/Proteus_Capture.wav",
+		"TrainingClean": "Data/Proteus_Capture_48k.wav",
 		"TrainingTarget": "../out2.wav"
 	},
 	{
 		"Parameters":[ 0.5 ],
-		"TrainingClean": "Data/Proteus_Capture.wav",
+		"TrainingClean": "Data/Proteus_Capture_48k.wav",
 		"TrainingTarget": "../out3.wav"
 	},
 	{
 		"Parameters":[ 0.75 ],
-		"TrainingClean": "Data/Proteus_Capture.wav",
+		"TrainingClean": "Data/Proteus_Capture_48k.wav",
 		"TrainingTarget": "../out4.wav"
 	},
 	{
 		"Parameters":[ 1.0 ],
-		"TrainingClean": "Data/Proteus_Capture.wav",
+		"TrainingClean": "Data/Proteus_Capture_48k.wav",
 		"TrainingTarget": "../out5.wav"
 	}]
 }
