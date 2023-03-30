@@ -5,10 +5,10 @@ import random
 import json
 
 def save_wav(name, data):
-    wavfile.write(name, 44100, data.flatten().astype(np.float32))
+    wavfile.write(name, 48000, data.flatten().astype(np.float32))
 
 def save_wav_dont_flatten(name, data):
-    wavfile.write(name, 44100, data.astype(np.float32))
+    wavfile.write(name, 48000, data.astype(np.float32))
 
 def normalize(data):
     data_max = max(data)
