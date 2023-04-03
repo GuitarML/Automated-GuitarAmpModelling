@@ -1,1 +1,1 @@
-{"hidden_size": 7, "unit_type": "LSTM", "loss_fcns": {"ESR": 0.75, "DC": 0.25}, "pre_filt": "None", "device": "proteus_knob", "file_name": "proteus_knob"}
+{"hidden_size": 10, "unit_type": "GRU", "loss_fcns": {"ESR": 0.75, "DC": 0.25}, "pre_filt": "None", "device": "proteus_knob", "file_name": "proteus_knob"}
