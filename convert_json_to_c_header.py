@@ -1,8 +1,8 @@
 ####################################################################################
-# This script converts a PyTorch json model (LSTM or GRU) to a c style header file.
+# This script converts a PyTorch json model (GRU) to a c style header file.
 # The purpose is to compress the model data to include in compiled c++ programs.
 #
-# Tested with LSTM and GRU models trained from the Automated-GuitarAmpModelling tool. 
+# Tested with GRU models trained from the Automated-GuitarAmpModelling tool. 
 #
 # usage: python convert_json_to_c_header.py <json_model>
 #
@@ -15,10 +15,9 @@ import argparse
 import sys
 import numpy as np
 
-def add_layer(layer_name, layer_data, header_data):
+def add_layer(layer_name, layer_data, header_data, size):
   """
   Adds layer weights and biases to header_data
-
   Inputs:
   layer_name (string) : The name of the layer as labelled by Pytorch (i.e. "rec.weight_ih_l0")
   layer_data (list)   : Either a 1D or 2D list of weights loaded from json file.
@@ -45,7 +44,9 @@ def add_layer(layer_name, layer_data, header_data):
       else:
         line += " "*len(var_declaration) + " { "
       c2 = 0   # 2nd counter to determine last item in list
-      for j in i:
+      # For GRU's, swap rz (needed for RTNeural to convert from pytorch to tensorflow conventions)
+      i_rzSwap = np.concatenate((i[size:size*2], i[0:size], i[size*2:])) 
+      for j in i_rzSwap:
         c2 += 1
         if c2 == len(i):
           line += str(j)
@@ -88,6 +89,7 @@ if __name__ == "__main__":
   for item in data['model_data'].keys():
     header_data.append(item + " : " + str(data['model_data'][item]))
   header_data.append("*/\n")
+  size = int(data['model_data']['hidden_size'])
 
   # Read the state dict from Pytorch Json model and reorganize data into c header format
   # Sum the rec.bias layers, skip adding individually
@@ -95,12 +97,12 @@ if __name__ == "__main__":
     if layer_name.startswith("rec.bias_") == True:
       continue
     if layer_name == "rec.weight_ih_l0" or layer_name == "rec.weight_hh_l0":
-      add_layer(layer_name, np.array(data['state_dict'][layer_name]).T, header_data) # Transpose 2D arrays (Pytorch->Tensorflow/Keras)
+      add_layer(layer_name, np.array(data['state_dict'][layer_name]).T, header_data, size) # Transpose 2D arrays (Pytorch->Tensorflow/Keras)
     else:
-      add_layer(layer_name, data['state_dict'][layer_name], header_data)
+      add_layer(layer_name, data['state_dict'][layer_name], header_data, size)
 
-  bias_sum = np.array(data['state_dict']['rec.bias_ih_l0']) + np.array(data['state_dict']['rec.bias_hh_l0'])
-  add_layer('lstm_bias_sum', bias_sum, header_data)
+  gru_bias = np.array([np.array(data['state_dict']['rec.bias_ih_l0']), np.array(data['state_dict']['rec.bias_hh_l0'])])
+  add_layer('rec_bias', gru_bias, header_data, size)
 
   # Write data to .h file
   new_filename = args.json_model.split(".json")[0] + '.h'
